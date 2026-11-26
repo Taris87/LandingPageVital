@@ -1,23 +1,18 @@
-# Vital Movement Center — Landing Page
+# Vital Movement Center
 
-Responsive static website in the supplied black-and-gold brand style.
+Responsive static landing page for Vital Movement Center, built with plain HTML, CSS and JavaScript.
 
-## Project structure
-- `index.html` — semantic page structure and content
-- `styles.css` — responsive styling, animation and reduced-motion support
-- `js/main.js` — accessible mobile navigation, reveal effects and safe contact rendering
-- `js/config.js` — business contact details (currently blank placeholders)
-- `assets/` — lightweight SVG brand artwork used by the site
-- `.htaccess` — optional Apache/LiteSpeed headers and caching; GitHub Pages ignores this file
+## Files
+- `index.html` — page structure and content
+- `style.css` — responsive styling and motion
+- `app.js` — navigation, scroll progress and interactions
+- `logo.png` — brand logo
+- `welcome-bg.jpg` — welcome banner artwork and social preview image
 
-## GitHub Pages
-The repository deploys automatically with GitHub Actions on pushes to `main`.
-The public site is expected at https://taris87.github.io/LandingPageVital/.
+## Hosting
+This project is deployed with GitHub Pages. It can also be uploaded to a standard Apache/LiteSpeed host such as Hostinger. The included `.htaccess` is intended for Apache/LiteSpeed hosting and is not used by GitHub Pages.
 
-## Before launch
-1. Add verified phone, email, address and Facebook details to `js/config.js`.
-2. Verify service descriptions and legal business details with the business owner.
-3. Add the appropriate legal notice/imprint and privacy policy for the business jurisdiction.
-4. Google Fonts are loaded externally; self-host them if a fully local asset setup is required.
+No build step or package installation is required.
 
-This is a static site: no contact form, backend, database, tracking, analytics or cookies are included. The .htaccess file applies only on compatible Apache/LiteSpeed hosting, not GitHub Pages.
+## Before going live
+Replace the placeholder contact details in `index.html` with the business's real phone number, email address, location, opening hours and social profile.
