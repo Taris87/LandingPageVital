@@ -60,6 +60,24 @@
     );
     pending.forEach((el) => revealIO.observe(el));
 
+    // The observer leaves out a strip at the bottom edge. Wherever scrolling comes to rest
+    // (anchor jump, restored scroll position, or the user stopping), anything that is
+    // actually on screen is shown.
+    let settleTimer = 0;
+    const settle = () => {
+      const vh = window.innerHeight;
+      document.querySelectorAll(".reveal-pending").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.height > 0 && r.top < vh && r.bottom > 0) show(el, false);
+      });
+    };
+    window.addEventListener("scroll", () => {
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 150);
+    }, { passive: true });
+    window.addEventListener("load", settle);
+    window.addEventListener("hashchange", settle);
+
     // Keyboard: focus inside a hidden block reveals it at once.
     document.addEventListener("focusin", (e) => {
       const el = e.target.closest && e.target.closest(".reveal-pending");
@@ -141,6 +159,12 @@
     paths.forEach((tp) => tp.setAttribute("startOffset", "0"));
     layers.forEach((el) => (el.style.translate = ""));
     showAll();
+  }
+
+  // The phrase length depends on the band font; measure again once the fonts are in.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(onResize);
+    document.fonts.addEventListener("loadingdone", onResize);
   }
 
   if (!reduce.matches) {
