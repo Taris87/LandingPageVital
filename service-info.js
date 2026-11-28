@@ -25,23 +25,23 @@ window.SERVICE_INFO = {
     sections: [
       {
         heading: "Allowing motion",
-        text: "Kinesiology tape can be used to help improve muscular firing and contraction patterns. This can lead to normalized muscle tone and can also help improve athletic performance, although some studies suggest the benefit is linked to a placebo effect."
+        text: "Kinesiology tape can be used to help improve muscular firing and contraction patterns. This can lead to normalized muscular tone and can also help improve athletic performance, but some studies suggest the benefit is really linked to a placebo effect."
       },
       {
         heading: "Inhibition and pain management",
-        text: "Kinesiology tape may help to decrease pain and muscle spasms. It can help reduce nerve pain signals to the brain, which can help decrease muscle guarding and protective spasms."
+        text: "Kinesiology tape may help to decrease pain and muscle spasms. It can help decrease nerve pain signals to the brain, which can help decrease muscle guarding and protective spasms."
       },
       {
         heading: "Support and stability",
-        text: "If you have a condition that requires a specific joint to be held in place, kinesiology taping may be right for you. Conditions like patellofemoral stress syndrome, iliotibial band friction syndrome and shoulder instability may benefit from the extra support provided by kinesiology tape. The tape can support your joint while still allowing for some motion."
+        text: "If you have a condition that requires a specific joint to be held in place, kinesiology taping may be right for you. Conditions like patellofemoral stress syndrome, iliotibial band friction syndrome, and shoulder instability may benefit from extra support provided by kinesiology tape. The tape can support your joint while still allowing for some motion."
       },
       {
         heading: "Decreasing swelling",
-        text: "If you have swelling from an injury or surgery, kinesiology tape may help decrease it by reducing pressure between the skin and the underlying tissues. This provides a pathway for excess fluid to drain."
+        text: "If you have had swelling from an injury or surgery, kinesiology tape may help decrease the swelling by decreasing pressure between the skin and underlying tissues. This provides a pathway for excess fluids to travel through."
       },
       {
         heading: "Scar tissue management",
-        text: "After surgery or trauma, such as burns, scars can form. Sometimes the tissue underneath the scar binds to your skin and the underlying fascia, limiting mobility and range of motion. Kinesiology tape can be used to manage scar tissue formation."
+        text: "After surgery or trauma, such as burns, scars can form. Sometimes the tissue underneath the scar binds to your skin and underlying fascia, limiting mobility and range of motion. Kinesiology tape can be used to manage scar tissue formation."
       }
     ],
     source: "From our Facebook post “How Kinesiology Tape Is Used,” November 27, 2026."
