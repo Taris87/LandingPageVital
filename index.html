@@ -1,231 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+    content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="theme-color" content="#16110a">
-  <title>Vital Movement Center, LLC | Kinesiology Taping, Medical Training, Massage</title>
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7f1e4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f0b06" media="(prefers-color-scheme: dark)">
+  <title>Vital Movement Center – Kinesiology Taping, Training &amp; Massage</title>
   <meta name="description"
-    content="Kinesiology taping, personal medical training and wellness massage. Move better, feel better, live better.">
+    content="Kinesiology taping, personal medical training and wellness massage in Keene, NH, Brattleboro and Rutland, VT, and Boston and Springfield, MA.">
   <meta property="og:title" content="Vital Movement Center, LLC">
-  <meta property="og:description" content="Move better. Feel better. Live better.">
-  <meta property="og:image" content="welcome-bg.jpg">
+  <meta property="og:description" content="Move better. Feel better. Live better. Kinesiology taping, personal medical training and wellness massage.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="logo.png" type="image/png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <script
-    type="application/ld+json">{"@context":"https://schema.org","@type":"HealthAndBeautyBusiness","name":"Vital Movement Center, LLC","slogan":"Move Better. Feel Better. Live Better.","makesOffer":["Kinesiology Taping","Personal Medical Training","Wellness Massage"]}</script>
-  <link rel="stylesheet" href="style.css?v=27">
+  <!-- og:url and og:image need the final absolute domain, see PLACEHOLDERS.md -->
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/dm-sans-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="head.js?v=30"></script>
+  <link rel="stylesheet" href="style.css?v=31">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"HealthAndBeautyBusiness","name":"Vital Movement Center, LLC","slogan":"Move Better. Feel Better. Live Better.","description":"Kinesiology taping, personal medical training and wellness massage.","telephone":"+1-802-490-4957","email":"vital-movement-center@outlook.com","areaServed":[{"@type":"City","name":"Keene, NH"},{"@type":"City","name":"Brattleboro, VT"},{"@type":"City","name":"Rutland, VT"},{"@type":"City","name":"Boston, MA"},{"@type":"City","name":"Springfield, MA"}],"sameAs":["https://www.facebook.com/profile.php?id=61595829029233"],"makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Kinesiology Taping"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Personal Medical Training"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Wellness Massage"}}]}</script>
 </head>
-
 <body>
-  <a class="skip" href="#main">Skip to main content</a>
-  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+<a class="skip" href="#main">Skip to main content</a>
 
-  <header class="top" id="top">
-    <a class="brand" href="#top" aria-label="Vital Movement Center, back to top">
-      <img class="logo-mark" src="logo.png" alt="" width="42" height="42" decoding="async">
-      <span class="brand-name">Vital Movement Center</span>
-    </a>
-    <button class="menu" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-      <span class="sr">Menu</span><i></i><i></i>
-    </button>
-    <nav id="nav" aria-label="Main">
-      <ul>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#for-you">Who it is for</a></li>
-        <li><a href="#visit">Your first visit</a></li>
-        <li><a href="#contact" class="pill">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+<div class="head">
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#top"><img class="logo" src="logo-320.jpg" alt="" width="44" height="44">Vital Movement Center</a>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  <nav id="site-nav" aria-label="Main"><ul><li><a href="#services">Services</a></li><li><a href="#approach">Approach</a></li><li><a href="#visit">Your first visit</a></li><li class="nav-end"><a class="cta" href="#contact">Contact</a><button class="theme-btn" type="button" aria-label="Switch color mode"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button></li></ul></nav>
+</header>
+</div>
+</div>
 
-  <main id="main">
+<main id="main" tabindex="-1">
+<div class="wrap">
+<section class="hero">
+  <div>
+    <p class="welcome">Welcome to Vital Movement Center</p>
+    <h1 class="disp"><span><span>Move better.</span></span><span><span>Feel better.</span></span><span><span>Live better.</span></span></h1>
+    <p class="lead">Kinesiology taping, personal medical training and wellness massage, built around your body and your goals.</p>
+    <div class="actions"><a class="btn" href="#contact">Get in touch</a><a class="ulink" href="#services">See our services</a></div>
+  </div>
+  <div class="collage">
+    <figure class="print" data-depth="0.05"><img src="welcome-bg.jpg" alt="Welcome to Vital Movement Center banner with the infinity logo" width="1536" height="585"></figure>
+    <img class="seal logo" data-depth="0.12" src="logo-320.jpg" alt="" width="160" height="160">
+    <p class="note">Kinesiology · Medical Training · Wellness Massage</p>
+  </div>
+</section>
+</div>
 
-    <section class="hero" id="hero" aria-labelledby="h1">
-      <div class="hero-glow" aria-hidden="true"></div>
+<!-- Golden band on the curved divider. Decorative; the services are listed as text below.
+     Two viewBox variants (wide >= 640 px, narrow below) so the lettering is never distorted. -->
+<div class="band" aria-hidden="true">
+  <svg class="band-wide" viewBox="0 0 1440 170" focusable="false">
+    <path class="band-hair" d="M-60 49 C 160 -11 300 109 480 49 S 780 -11 960 49 S 1260 109 1500 49"/>
+    <path id="band-path-wide" class="band-ribbon" d="M-60 95 C 160 35 300 155 480 95 S 780 35 960 95 S 1260 155 1500 95"/>
+    <path class="band-hair" d="M-60 141 C 160 81 300 201 480 141 S 780 81 960 141 S 1260 201 1500 141"/>
+    <text class="band-text" dy=".36em"><textPath href="#band-path-wide" startOffset="0" data-reps="4">KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;</textPath></text>
+  </svg>
+  <svg class="band-narrow" viewBox="0 0 390 104" focusable="false">
+    <path class="band-hair" d="M-30 23 C 40 3 110 43 195 23 S 340 3 420 23"/>
+    <path id="band-path-narrow" class="band-ribbon" d="M-30 52 C 40 32 110 72 195 52 S 340 32 420 52"/>
+    <path class="band-hair" d="M-30 81 C 40 61 110 101 195 81 S 340 61 420 81"/>
+    <text class="band-text" dy=".36em"><textPath href="#band-path-narrow" startOffset="0" data-reps="4">KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;KINESIOLOGY TAPING&#160;<tspan class="inf">∞</tspan>&#160;PERSONAL MEDICAL TRAINING&#160;<tspan class="inf">∞</tspan>&#160;WELLNESS MASSAGE&#160;<tspan class="inf">∞</tspan>&#160;</textPath></text>
+  </svg>
+</div>
 
-      <div class="hero-inner wrap">
-        <div class="hero-copy">
-          <p class="welcome fade">Welcome to Vital Movement Center</p>
-          <h1 id="h1">
-            <span class="ln"><span>Move better.</span></span>
-            <span class="ln"><span>Feel better.</span></span>
-            <span class="ln"><span>Live better.</span></span>
-          </h1>
-          <p class="lead fade">Kinesiology taping, personal medical training and wellness massage, built around your
-            body and your goals.</p>
-          <div class="actions fade">
-            <a class="btn" href="#contact">Get in touch</a>
-            <a class="link" href="#services">See our services</a>
-          </div>
-        </div>
-        <div class="hero-seal-wrap" aria-hidden="true">
-          <img class="hero-seal" src="logo.png" alt="" width="340" height="340" decoding="async">
-        </div>
-      </div>
-
-      <a class="scroll fade" href="#services" aria-label="Scroll to services"><span></span></a>
-    </section>
-
-    <section id="services" class="services" aria-labelledby="h-services">
-      <div class="wrap">
-        <p class="kicker reveal">01 — Services</p>
-        <h2 id="h-services" class="reveal">Three ways we help you keep moving</h2>
-        <p class="intro reveal">Explore the services and find the right support for your goals.</p>
-        <div class="svc">
-          <details name="svc" open class="reveal">
-            <summary>
-              <h3>Kinesiology Taping</h3><span class="ico" aria-hidden="true"></span>
-            </summary>
-            <div class="body">
-              <p>Kinesiology tape supports natural motion and can ease pain and muscle spasms. Athletic taping supports
-                a joint and limits motion where an existing pain calls for it.</p>
-              <ul>
-                <li>Supports movement</li>
-                <li>Eases pain and spasms</li>
-                <li>Stabilises with athletic taping</li>
-              </ul>
-            </div>
-          </details>
-          <details name="svc" class="reveal">
-            <summary>
-              <h3>Personal Medical Training</h3><span class="ico" aria-hidden="true"></span>
-            </summary>
-            <div class="body">
-              <p>One-to-one sessions tailored to you and your goals, for everyday life, after an injury or to stay
-                active.</p>
-              <ul>
-                <li>Tailored sessions</li>
-                <li>Increased strength and mobility</li>
-                <li>Improved energy levels</li>
-              </ul>
-            </div>
-          </details>
-          <details name="svc" class="reveal">
-            <summary>
-              <h3>Wellness Massage</h3><span class="ico" aria-hidden="true"></span>
-            </summary>
-            <div class="body">
-              <p>Hands-on massage focused on relaxation, stress relief and overall well-being. It is a wellness service
-                and does not treat specific medical conditions.</p>
-              <ul>
-                <li>Relaxation</li>
-                <li>Stress relief</li>
-                <li>Overall well-being</li>
-              </ul>
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section id="for-you" class="foryou" aria-labelledby="h-for">
-      <div class="wrap two">
-        <div class="reveal">
-          <p class="kicker">02 — Approach</p>
-          <h2 id="h-for">Care that starts with your body</h2>
-        </div>
-        <div class="reveal">
-          <p class="intro-lg">At Vital Movement Center, we are passionate about helping people move with greater
-            confidence, improve mobility, manage discomfort, and maintain an active, healthy lifestyle.</p>
-          <p class="big">Through personalized care and a hands-on approach, we offer services designed to support your
-            body's individual needs and goals.</p>
-          <ul class="needs">
-            <li>Working through an injury</li>
-            <li>Managing everyday aches and pains</li>
-            <li>Building strength and mobility</li>
-            <li>Simply wanting to feel your best</li>
-          </ul>
-          <p class="mission">Whether you are working through an injury or simply want to feel your best, Vital Movement
-            Center is here to support you. We believe movement is an important part of living a healthy, fulfilling
-            life. Our mission is to help you stay active, keep moving, and enjoy life to the fullest.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="visit" class="visit" aria-labelledby="h-visit">
-      <div class="wrap">
-        <p class="kicker reveal">03 — Process</p>
-        <h2 id="h-visit" class="reveal">Your first visit</h2>
-        <ol class="steps timeline">
-          <li>
-            <h3>Get in touch</h3>
-            <p>Call, email or message us on Facebook.</p>
-          </li>
-          <li>
-            <h3>Tell us your goals</h3>
-            <p>Share what you want to improve and what holds you back.</p>
-          </li>
-          <li>
-            <h3>Receive tailored care</h3>
-            <p>Your session is shaped around your needs.</p>
-          </li>
-          <li>
-            <h3>Keep moving</h3>
-            <p>Stay active and enjoy life to the fullest.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <section id="contact" class="contact" aria-labelledby="h-contact">
-      <div class="wrap two">
-        <div class="reveal">
-          <p class="kicker">04 — Contact</p>
-          <h2 id="h-contact">Let us know how we can help</h2>
-          <p class="lead">Reach us directly. We reply as soon as we can.</p>
-        </div>
-        <dl class="info reveal">
-          <div>
-            <dt>Phone</dt>
-            <dd><a href="tel:+10000000000" id="c1">[Phone number]</a> <button class="copy" data-target="c1"
-                type="button">Copy<span class="sr"> phone number</span></button></dd>
-          </div>
-          <div>
-            <dt>Email</dt>
-            <dd><a href="mailto:info@example.com" id="c2">[Email address]</a> <button class="copy" data-target="c2"
-                type="button">Copy<span class="sr"> email address</span></button></dd>
-          </div>
-          <div>
-            <dt>Address</dt>
-            <dd>
-              <address>[Street, ZIP City]</address>
-            </dd>
-          </div>
-          <div>
-            <dt>Hours</dt>
-            <dd>[Days and hours]</dd>
-          </div>
-          <div>
-            <dt>Social</dt>
-            <dd><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Vital Movement Center on
-                Facebook<span class="sr"> (opens in a new tab)</span></a></dd>
-          </div>
-        </dl>
-        <p class="sr" role="status" aria-live="polite" id="status"></p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <img class="footer-logo" src="logo.png" alt="Vital Movement Center" width="88" height="88" loading="lazy"
-        decoding="async">
-      <p class="closing">Helping you move better, feel stronger, and live life to the fullest!</p>
-      <p>Medicine and Health &middot; Kinesiology &middot; Medical Training &middot; Wellness Massage</p>
-      <p>&copy; <span id="y">2026</span> Vital Movement Center, LLC</p>
-      <p class="note">Our services support wellness and movement and do not replace medical diagnosis or treatment.
-        Please consult your doctor about medical conditions.</p>
+<div class="wrap">
+<section class="railed" id="services">
+  <p class="rail" data-reveal><b>01</b>Services</p>
+  <div>
+    <h2 class="disp h2" data-reveal>Three ways we help you keep moving</h2>
+    <p class="intro" data-reveal>Explore the services and find the right support for your goals.</p>
+    <div class="menu-card" data-reveal-group>
+      <article class="item" data-reveal><h3>Kinesiology Taping</h3><p>Kinesiology tape supports natural motion and can ease pain and muscle spasms. Athletic taping supports a joint and limits motion where an existing pain calls for it.<button type="button" class="info-more" data-info="taping" aria-haspopup="dialog" aria-label="Learn more about Kinesiology Taping">Learn more</button></p><ul><li>Supports movement</li><li>Eases pain and spasms</li><li>Stabilizes with athletic taping</li></ul></article>
+      <article class="item" data-reveal><h3>Personal Medical Training</h3><p>One-to-one sessions tailored to you and your goals, for everyday life, after an injury or to stay active.<button type="button" class="info-more" data-info="training" aria-haspopup="dialog" aria-label="Learn more about Personal Medical Training">Learn more</button></p><ul><li>Tailored sessions</li><li>Increased strength and mobility</li><li>Improved energy levels</li></ul></article>
+      <article class="item" data-reveal><h3>Wellness Massage</h3><p>Hands-on massage focused on relaxation, stress relief and overall well-being. It is a wellness service and does not treat specific medical conditions.<button type="button" class="info-more" data-info="massage" aria-haspopup="dialog" aria-label="Learn more about Wellness Massage">Learn more</button></p><ul><li>Relaxation</li><li>Stress relief</li><li>Overall well-being</li></ul></article>
     </div>
-  </footer>
+  </div>
+</section>
+</div>
 
-  <script src="app.js" defer></script>
+<section class="approach" id="approach">
+  <div class="wrap railed">
+    <p class="rail" data-reveal><b>02</b>Approach</p>
+    <div>
+      <h2 class="sr">Care that starts with your body</h2>
+      <p class="disp statement" data-reveal>We are passionate about helping people move with greater confidence, improve mobility, manage discomfort, and <em>maintain an active, healthy lifestyle.</em></p>
+      <div class="two">
+        <p data-reveal>Through personalized care and a hands-on approach, we offer services designed to support your body's individual needs and goals. Whether you are working through an injury or simply want to feel your best, Vital Movement Center is here to support you.</p>
+        <ul class="chips" data-reveal-group><li data-reveal>Working through an injury</li><li data-reveal>Managing everyday aches and pains</li><li data-reveal>Building strength and mobility</li><li data-reveal>Simply wanting to feel your best</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+<section class="railed" id="visit">
+  <p class="rail" data-reveal><b>03</b>Process</p>
+  <div>
+    <h2 class="disp h2" data-reveal>Your first visit</h2>
+    <div class="path">
+      <svg viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true" focusable="false" data-reveal><path d="M20 40 C 160 40 200 130 330 130 S 520 40 660 40 S 860 130 990 130" fill="none" stroke="currentColor" stroke-width="1.25" vector-effect="non-scaling-stroke" stroke-dasharray="4 6"/></svg>
+      <ol data-reveal-group>
+        <li data-reveal><span class="dot">1</span><h3>Get in touch</h3><p>Call, email or message us on Facebook.</p></li>
+        <li data-reveal><span class="dot">2</span><h3>Tell us your goals</h3><p>Share what you want to improve and what holds you back.</p></li>
+        <li data-reveal><span class="dot">3</span><h3>Receive tailored care</h3><p>Your session is shaped around your needs.</p></li>
+        <li data-reveal><span class="dot">4</span><h3>Keep moving</h3><p>Stay active and enjoy life to the fullest.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="evening" id="contact" data-reveal>
+  <div><h2 class="disp h2">Let us know how we can help</h2><p class="lead">Reach us directly. We reply as soon as we can.</p></div>
+  <dl>
+    <div><dt>Phone</dt><dd><a href="tel:+18024904957">+1&nbsp;802&#8209;490&#8209;4957</a></dd></div>
+    <div><dt>Email</dt><dd><a href="mailto:vital-movement-center@outlook.com">vital-movement-center@outlook.com</a></dd></div>
+    <div><dt>Service area</dt><dd>Keene,&nbsp;NH<br>Brattleboro &amp; Rutland,&nbsp;VT<br>Boston &amp; Springfield,&nbsp;MA</dd></div>
+    <!-- PLACEHOLDER: opening hours (see PLACEHOLDERS.md) -->
+    <div><dt>Hours</dt><dd>[Days and hours]</dd></div>
+    <div><dt>Social</dt><dd><a href="https://www.facebook.com/profile.php?id=61595829029233" target="_blank" rel="noopener noreferrer">Vital Movement Center on Facebook<span class="sr"> (opens in a new tab)</span></a></dd></div>
+  </dl>
+</section>
+</div>
+</main>
+
+<div class="wrap">
+<footer>
+  <div class="f-top"><p class="disp f-close" data-reveal>Helping you move better, feel stronger, and live life to the fullest!</p><img class="logo" src="logo-320.jpg" alt="Vital Movement Center" width="110" height="110" loading="lazy" decoding="async"></div>
+  <p class="f-note">Our services support wellness and movement and do not replace medical diagnosis or treatment. Please consult your doctor about medical conditions.</p>
+  <!-- PLACEHOLDER: legal notice and privacy policy pages are still missing (see PLACEHOLDERS.md) -->
+  <div class="f-bot"><span>© 2026 Vital Movement Center, LLC · Serving New Hampshire, Vermont &amp; Massachusetts</span><nav aria-label="Legal"><a href="#">Legal notice (Impressum)</a><a href="#">Privacy policy (Datenschutz)</a></nav></div>
+</footer>
+</div>
+<script src="service-info.js?v=29" defer></script>
+<script src="app.js?v=30" defer></script>
+<script src="motion.js?v=30" defer></script>
 </body>
-
 </html>

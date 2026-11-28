@@ -1,207 +1,273 @@
+/*
+  Vital Movement Center – page behavior.
+  - Mobile menu (below 900 px): disclosure button with aria-expanded.
+  - Sticky header: background once scrolled, slides away while scrolling down, comes back
+    on the way up. Never hidden while the menu is open or the keyboard focus is inside.
+  - Theme button: light/dark choice, saved in localStorage (head.js applies it on load).
+  - Back to top: round button once the services section has been passed.
+  - "Learn more" pop-up: native <dialog>, content from service-info.js.
+*/
 (function () {
-  var d = document,
-    r = d.documentElement;
-  var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  r.classList.add("js");
+  "use strict";
 
-  var y = d.getElementById("y");
-  if (y) y.textContent = new Date().getFullYear();
+  const root = document.documentElement;
+  root.classList.add("js");
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-  /* Scroll-Progress + Header-Solid */
-  var top = d.getElementById("top"),
-    bar = d.getElementById("bar");
-  function onScroll() {
-    if (top) top.classList.toggle("solid", window.scrollY > 40);
-    if (bar) {
-      var h = r.scrollHeight - window.innerHeight;
-      bar.style.transform = "scaleX(" + (h > 0 ? window.scrollY / h : 0) + ")";
+  /* ---------- Mobile menu ---------- */
+  const head = document.querySelector(".head");
+  const header = document.querySelector(".top");
+  const menuBtn = header && header.querySelector(".menu-btn");
+  const nav = header && header.querySelector("nav");
+
+  if (header && menuBtn && nav) {
+    const desktop = matchMedia("(min-width: 900px)");
+
+    const setMenu = (open, returnFocus) => {
+      header.classList.toggle("is-open", open);
+      if (open && head) head.classList.remove("is-hidden");
+      menuBtn.setAttribute("aria-expanded", String(open));
+      if (!open && returnFocus) menuBtn.focus();
+    };
+    const isOpen = () => menuBtn.getAttribute("aria-expanded") === "true";
+
+    menuBtn.addEventListener("click", () => setMenu(!isOpen(), false));
+
+    // Following a link closes the menu.
+    nav.addEventListener("click", (e) => {
+      if (e.target.closest("a") && isOpen()) setMenu(false, false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isOpen()) setMenu(false, true);
+    });
+
+    // A click outside the header, or focus leaving it, closes the menu.
+    document.addEventListener("click", (e) => {
+      if (isOpen() && !header.contains(e.target)) setMenu(false, false);
+    });
+    header.addEventListener("focusout", (e) => {
+      if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setMenu(false, false);
+    });
+
+    desktop.addEventListener("change", (e) => {
+      if (e.matches) setMenu(false, false);
+    });
+  }
+
+  /* ---------- Sticky header ---------- */
+  const focusVisibleIn = (el) => {
+    try {
+      return !!el.querySelector(":focus-visible");
+    } catch (e) {
+      return el.contains(document.activeElement);
     }
-  }
-  onScroll();
-  addEventListener("scroll", onScroll, { passive: true });
+  };
 
-  /* Mobile Menu */
-  var menu = d.getElementById("menu"),
-    nav = d.getElementById("nav");
-  function setMenu(o) {
-    if (!menu || !nav) return;
-    menu.setAttribute("aria-expanded", o);
-    menu.setAttribute("aria-label", o ? "Close menu" : "Open menu");
-    nav.setAttribute("aria-hidden", String(!o && matchMedia("(max-width: 759px)").matches));
-    nav.classList.toggle("open", o);
-    document.body.style.overflow = o ? "hidden" : "";
-  }
-  if (menu && nav) {
-    setMenu(false);
-    menu.addEventListener("click", function () {
-      var opening = menu.getAttribute("aria-expanded") !== "true";
-      setMenu(opening);
-      if (opening) {
-        var firstLink = nav.querySelector("a");
-        if (firstLink) firstLink.focus();
+  if (head && header) {
+    let lastY = window.scrollY;
+    let down = 0;
+    let up = 0;
+    let ticking = false;
+
+    const keepShown = () => reduceMotion.matches || header.classList.contains("is-open") || focusVisibleIn(header);
+
+    const update = () => {
+      ticking = false;
+      const y = Math.max(0, window.scrollY);
+      const dy = y - lastY;
+      lastY = y;
+      if (dy > 0) { down += dy; up = 0; } else if (dy < 0) { up -= dy; down = 0; }
+      head.classList.toggle("is-scrolled", y > 40);
+      if (keepShown() || y <= head.offsetHeight) head.classList.remove("is-hidden");
+      else if (down > 8) head.classList.add("is-hidden");
+      else if (up > 1) head.classList.remove("is-hidden");
+    };
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
       }
+    }, { passive: true });
+    update();
+
+    // Keyboard focus moving into a hidden header brings it back.
+    header.addEventListener("focusin", () => {
+      if (focusVisibleIn(header)) head.classList.remove("is-hidden");
     });
-    nav.addEventListener("click", function (e) {
-      if (e.target.closest("a")) setMenu(false);
-    });
-    d.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && menu.getAttribute("aria-expanded") === "true") {
-        setMenu(false);
-        menu.focus();
+    reduceMotion.addEventListener("change", update);
+  }
+
+  /* ---------- Theme button ---------- */
+  const themeBtn = document.querySelector(".theme-btn");
+  const theme = window.VMC_THEME;
+  if (themeBtn && theme) {
+    const sysDark = matchMedia("(prefers-color-scheme: dark)");
+    const current = () => root.getAttribute("data-theme") || (sysDark.matches ? "dark" : "light");
+    const label = () => themeBtn.setAttribute("aria-label", current() === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    let fadeTimer = 0;
+
+    themeBtn.addEventListener("click", () => {
+      const next = current() === "dark" ? "light" : "dark";
+      if (!reduceMotion.matches) {
+        root.classList.add("theme-fade");
+        clearTimeout(fadeTimer);
+        fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 450);
       }
-    });
-    /* Overlay schließen bei Resize ≥760px */
-    matchMedia("(min-width:760px)").addEventListener("change", function (e) {
-      setMenu(false);
-      nav.removeAttribute("aria-hidden");
-    });
-  }
-
-  /* Aktive Sektion */
-  var links = {};
-  if (nav) {
-    nav.querySelectorAll("a").forEach(function (a) {
-      var href = a.getAttribute("href");
-      if (href && href.charAt(0) === "#") links[href.slice(1)] = a;
-    });
-  }
-  if ("IntersectionObserver" in window) {
-    var so = new IntersectionObserver(
-      function (es) {
-        es.forEach(function (e) {
-          var a = links[e.target.id];
-          if (!a) return;
-          if (e.isIntersecting) {
-            Object.keys(links).forEach(function (k) {
-              links[k].removeAttribute("aria-current");
-            });
-            a.setAttribute("aria-current", "true");
-          }
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" },
-    );
-    ["services", "for-you", "visit", "contact"].forEach(function (id) {
-      var s = d.getElementById(id);
-      if (s) so.observe(s);
-    });
-  }
-
-  /* Hero-Parallax — nur Desktop, kein Reduce */
-  var hero = d.getElementById("hero");
-  if (
-    !calm &&
-    matchMedia("(pointer:fine)").matches &&
-    matchMedia("(min-width:760px)").matches &&
-    hero
-  ) {
-    hero.addEventListener("pointermove", function (e) {
-      var b = hero.getBoundingClientRect();
-      r.style.setProperty(
-        "--px",
-        ((e.clientX - b.left) / b.width - 0.5).toFixed(3),
-      );
-      r.style.setProperty(
-        "--py",
-        ((e.clientY - b.top) / b.height - 0.5).toFixed(3),
-      );
-    });
-  }
-
-  /* Reveal on scroll */
-  if ("IntersectionObserver" in window && !calm) {
-    var ro = new IntersectionObserver(
-      function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            ro.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
-    );
-    d.querySelectorAll(".reveal").forEach(function (el) {
-      ro.observe(el);
-    });
-  } else {
-    d.querySelectorAll(".reveal").forEach(function (el) {
-      el.classList.add("in");
-    });
-  }
-
-  /* Scroll-linked timeline progress */
-  var steps = d.querySelector(".visit .timeline");
-  if (steps && !calm) {
-    var items = Array.prototype.slice.call(steps.querySelectorAll("li"));
-    var ticking = false;
-    steps.classList.add("timeline-active");
-
-    function updateTimeline() {
-      var box = steps.getBoundingClientRect();
-      var first = items[0].getBoundingClientRect();
-      var last = items[items.length - 1].getBoundingClientRect();
-      var markerSize = parseFloat(getComputedStyle(items[0], "::before").width) || 35.2;
-      var horizontal = matchMedia("(min-width: 1000px)").matches;
-      var vh = window.innerHeight || r.clientHeight;
-      var range = box.height + vh * 0.38;
-      var progress = Math.max(0, Math.min(1, (vh * 0.78 - box.top) / range));
-      var startX = first.left + markerSize / 2 - box.left;
-      var startY = first.top + markerSize / 2 - box.top;
-
-      if (horizontal) {
-        steps.style.setProperty("--timeline-start-x", startX + "px");
-        steps.style.setProperty("--timeline-start-y", startY + "px");
-        steps.style.setProperty("--timeline-length", Math.max(0, last.left + markerSize / 2 - first.left - markerSize / 2) + "px");
-      } else {
-        steps.style.setProperty("--timeline-start-x", startX + "px");
-        steps.style.setProperty("--timeline-start-y", startY + "px");
-        steps.style.setProperty("--timeline-length", Math.max(0, last.top + markerSize / 2 - first.top - markerSize / 2) + "px");
+      theme.apply(next);
+      try {
+        localStorage.setItem(theme.key, next);
+      } catch (e) {
+        /* storage blocked: the choice lasts for this page view only */
       }
-      steps.style.setProperty("--timeline-progress", progress.toFixed(3));
+      label();
+    });
+    // Without a saved choice the device setting applies, also when it changes.
+    sysDark.addEventListener("change", label);
+    label();
+  }
 
-      items.forEach(function (item, i) {
-        var start = (i / items.length) * 0.9;
-        var visible = Math.max(0, Math.min(1, (progress - start) / 0.18));
-        item.style.opacity = visible.toFixed(2);
-        item.style.transform = "translateY(" + ((1 - visible) * 12).toFixed(1) + "px)";
-        item.style.setProperty("--step-glow", (visible * 0.38).toFixed(2));
+  /* ---------- Back to top ---------- */
+  const services = document.getElementById("services");
+  if (services) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const toTop = document.createElement("button");
+    toTop.type = "button";
+    toTop.className = "to-top";
+    toTop.setAttribute("aria-label", "Back to top");
+    const arrow = document.createElementNS(svgNS, "svg");
+    arrow.setAttribute("viewBox", "0 0 24 24");
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.setAttribute("focusable", "false");
+    const shaft = document.createElementNS(svgNS, "path");
+    shaft.setAttribute("d", "M12 19V5M6 11l6-6 6 6");
+    arrow.append(shaft);
+    toTop.append(arrow);
+    document.body.append(toTop);
+
+    // Shown once the whole services section is above the viewport. Measured on scroll
+    // (an observer would miss a jump from "below" straight to "above" the viewport).
+    let toTopTick = false;
+    const toTopUpdate = () => {
+      toTopTick = false;
+      toTop.classList.toggle("is-shown", services.getBoundingClientRect().bottom <= 0);
+    };
+    window.addEventListener("scroll", () => {
+      if (!toTopTick) {
+        toTopTick = true;
+        requestAnimationFrame(toTopUpdate);
+      }
+    }, { passive: true });
+    window.addEventListener("resize", toTopUpdate, { passive: true });
+    toTopUpdate();
+
+    toTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? "instant" : "smooth" });
+      if (head) head.classList.remove("is-hidden");
+      const brand = document.querySelector(".brand");
+      if (brand) brand.focus({ preventScroll: true });
+    });
+  }
+
+  /* ---------- "Learn more" pop-up ---------- */
+  const data = window.SERVICE_INFO || {};
+  const note = window.SERVICE_INFO_NOTE || "";
+
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  };
+
+  const dialog = el("dialog", "info-dialog");
+  dialog.setAttribute("aria-labelledby", "info-dialog-title");
+  const panel = el("div", "info-panel");
+  const close = el("button", "info-close");
+  close.type = "button";
+  close.setAttribute("aria-label", "Close");
+  const svgNS = "http://www.w3.org/2000/svg";
+  const icon = document.createElementNS(svgNS, "svg");
+  icon.setAttribute("viewBox", "0 0 24 24");
+  icon.setAttribute("aria-hidden", "true");
+  const cross = document.createElementNS(svgNS, "path");
+  cross.setAttribute("d", "M6 6l12 12M18 6L6 18");
+  cross.setAttribute("stroke", "currentColor");
+  cross.setAttribute("stroke-width", "1.6");
+  cross.setAttribute("fill", "none");
+  cross.setAttribute("stroke-linecap", "round");
+  icon.append(cross);
+  close.append(icon);
+  const body = el("div", "info-body");
+  panel.append(close, body);
+  dialog.append(panel);
+  document.body.append(dialog);
+
+  let opener = null;
+
+  function render(info) {
+    body.replaceChildren();
+    body.append(el("p", "info-kicker", "Service"));
+    const h = el("h2", "info-title", info.title);
+    h.id = "info-dialog-title";
+    body.append(h);
+    if (info.summary) body.append(el("p", "info-summary", info.summary));
+    if (info.points && info.points.length) {
+      const ul = el("ul", "info-points");
+      info.points.forEach((p) => ul.append(el("li", "", p)));
+      body.append(ul);
+    }
+    if (info.sections && info.sections.length) {
+      if (info.sectionsTitle) body.append(el("h3", "info-sections-title", info.sectionsTitle));
+      const list = el("div", "info-sections");
+      info.sections.forEach((s, i) => {
+        const block = el("div", "info-section");
+        block.style.setProperty("--i", i);
+        block.append(el("h4", "", s.heading), el("p", "", s.text));
+        list.append(block);
       });
+      body.append(list);
     }
-
-    function requestTimelineUpdate() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        updateTimeline();
-        ticking = false;
-      });
-    }
-
-    updateTimeline();
-    addEventListener("scroll", requestTimelineUpdate, { passive: true });
-    addEventListener("resize", requestTimelineUpdate, { passive: true });
+    if (info.source) body.append(el("p", "info-source", info.source));
+    if (note) body.append(el("p", "info-note", note));
   }
 
-  /* Copy-Buttons */
-  var st = d.getElementById("status");
-  d.querySelectorAll(".copy").forEach(function (b) {
-    var original = b.innerHTML;
-    b.addEventListener("click", function () {
-      var t = d.getElementById(b.dataset.target);
-      if (!t || !navigator.clipboard) return;
-      var txt = t.textContent.trim();
-      navigator.clipboard
-        .writeText(txt)
-        .then(function () {
-          if (st) st.textContent = "Copied: " + txt;
-          b.innerHTML = "Copied";
-          setTimeout(function () {
-            b.innerHTML = original;
-            if (st) st.textContent = "";
-          }, 1800);
-        })
-        .catch(function () {});
-    });
+  function open(key, trigger) {
+    const info = data[key];
+    if (!info || typeof dialog.showModal !== "function") return;
+    opener = trigger;
+    render(info);
+    panel.scrollTop = 0;
+    dialog.showModal();
+    close.focus();
+  }
+
+  function shut() {
+    if (!dialog.open) return;
+    const done = () => {
+      dialog.classList.remove("is-closing");
+      dialog.close();
+    };
+    if (reduceMotion.matches) return done();
+    dialog.classList.add("is-closing");
+    setTimeout(done, 220);
+  }
+
+  dialog.addEventListener("close", () => {
+    if (opener) opener.focus();
+    opener = null;
+  });
+  dialog.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    shut();
+  });
+  close.addEventListener("click", shut);
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) shut();
+  });
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-info]");
+    if (btn) open(btn.dataset.info, btn);
   });
 })();
