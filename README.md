@@ -5,8 +5,10 @@ No build step or package installation is required.
 
 ## Files
 - `index.html` — page structure and content
-- `style.css` — layout, light and dark theme (follows the system setting), pop-up styles
-- `app.js` — mobile menu and the "Learn more" pop-up
+- `style.css` — layout, light and dark theme, hero entrance, pop-up styles
+- `head.js` — small script loaded first in `<head>`: applies a saved light/dark choice before the page is drawn and starts the hero entrance
+- `app.js` — mobile menu, sticky header, light/dark button, back-to-top button and the "Learn more" pop-up
+- `motion.js` — scroll reveals, the moving golden band and the hero collage depth
 - `service-info.js` — content of the "Learn more" pop-ups (see below)
 - `fonts/` — self-hosted web fonts (DM Sans, Fraunces Italic, Barlow Condensed ExtraBold) with their SIL Open Font License files
 - `logo-320.jpg` — logo for the header, hero seal and footer
@@ -35,7 +37,10 @@ taping: {
 - Empty `sections`, `sectionsTitle` or `source` are simply not shown.
 - The key (`taping`, `training`, `massage`) matches `data-info="…"` on the "Learn more" button in `index.html`. A new service needs a new key and a button with the same value.
 - Use US spelling and plain text (no HTML).
-- After any change to `style.css`, `app.js`, `motion.js` or `service-info.js`, raise the `?v=` number in `index.html` so browsers load the new version.
+- After any change to `style.css`, `head.js`, `app.js`, `motion.js` or `service-info.js`, raise the `?v=` number in `index.html` so browsers load the new version.
+
+## Light and dark mode
+On the first visit the page follows the device setting. The sun/moon button in the navigation (inside the menu on small screens) switches the mode; the choice is stored in the browser (`localStorage`, no cookie) and used on later visits. Colors are defined once in `style.css` as `light-dark(light, dark)` pairs.
 
 ## Hosting
 This project is deployed with GitHub Pages on every push to `main`; the whole repository folder is published. It can also be uploaded to a standard Apache/LiteSpeed host such as Hostinger. The included `.htaccess` is intended for Apache/LiteSpeed hosting and is not used by GitHub Pages.

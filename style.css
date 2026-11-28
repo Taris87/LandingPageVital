@@ -1,6 +1,6 @@
 /*
   Vital Movement Center – landing page styles.
-  Light theme by default, dark theme from the system setting (one override block below).
+  Light and dark theme follow the device setting; the theme button can override it.
   Fonts are self-hosted (SIL Open Font License, see fonts/OFL-*.txt).
 */
 
@@ -27,38 +27,42 @@
   font-display: swap;
 }
 
-/* ---------- Tokens: light (default) ---------- */
+/* ---------- Tokens ----------
+   Every color is one light-dark(light, dark) pair, so each value exists only once.
+   The pair follows color-scheme: the device setting by default ("light dark"), or the
+   visitor's choice from the theme button (html[data-theme], saved by head.js / app.js). */
 :root {
   color-scheme: light dark;
-  --bg: #f7f1e4;
-  --surface: #efe6d2;
-  --text: #2a1e10;
-  --soft: #5a4630;
-  --accent: #6b4710;
-  --line: rgba(42, 30, 16, .22);
-  --night: #16110a;
+  --bg: light-dark(#f7f1e4, #0f0b06);
+  --surface: light-dark(#efe6d2, #1c150c);
+  --text: light-dark(#2a1e10, #f3ecdd);
+  --soft: light-dark(#5a4630, #bfb29a);
+  --accent: light-dark(#6b4710, #e3b866);
+  --line: light-dark(rgba(42, 30, 16, .22), rgba(227, 184, 102, .28));
+  --night: light-dark(#16110a, #1c150c);
   --night-text: #f3ecdd;
-  --night-soft: #c9bda5;
+  --night-soft: light-dark(#c9bda5, #bfb29a);
   --night-accent: #e3b866;
-  --night-line: rgba(243, 236, 221, .18);
+  --night-line: light-dark(rgba(243, 236, 221, .18), rgba(227, 184, 102, .28));
   --band: #e3b866;
-  --band-text: #16110a;
-  --btn-bg: #2a1e10;
-  --btn-text: #f7f1e4;
-  --btn-hover: #6b4710;
-  --pill-bg: #efe6d2;
-  --pill-line: transparent;
-  --print: #16110a;
-  --shadow: rgba(42, 30, 16, .55);
+  --band-text: light-dark(#16110a, #0f0b06);
+  --btn-bg: light-dark(#2a1e10, #e3b866);
+  --btn-text: light-dark(#f7f1e4, #0f0b06);
+  --btn-hover: light-dark(#6b4710, #f3ecdd);
+  --pill-bg: light-dark(#efe6d2, #1c150c);
+  --pill-line: light-dark(transparent, rgba(227, 184, 102, .28));
+  --print: light-dark(#16110a, #1c150c);
+  --shadow: light-dark(rgba(42, 30, 16, .55), rgba(0, 0, 0, .6));
+  --head-bg: light-dark(rgba(247, 241, 228, .82), rgba(15, 11, 6, .8));
 
   /* Pop-up uses the same tokens */
-  --dlg-bg: var(--bg);
+  --dlg-bg: light-dark(var(--bg), var(--surface));
   --dlg-fg: var(--text);
   --dlg-muted: var(--soft);
   --dlg-accent: var(--accent);
   --dlg-accent-text: var(--accent);
   --dlg-link: var(--text);
-  --dlg-line: var(--line);
+  --dlg-line: light-dark(var(--line), rgba(227, 184, 102, .35));
   --dlg-display: var(--sans);
   --dlg-display-weight: 300;
 
@@ -73,35 +77,14 @@
   --breath-ease: cubic-bezier(.22, 1, .36, 1);
   --breath-step: 90ms;
   --breath-rise: 24px;
+  /* Hero entrance and header */
+  --intro-ease: cubic-bezier(.16, 1, .3, 1);
+  --pop-ease: cubic-bezier(.34, 1.56, .64, 1);
+  --head-dur: 320ms;
 }
-
-/* ---------- Tokens: dark. The only dark-mode block. ---------- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f0b06;
-    --surface: #1c150c;
-    --text: #f3ecdd;
-    --soft: #bfb29a;
-    --accent: #e3b866;
-    --line: rgba(227, 184, 102, .28);
-    --night: #1c150c;
-    --night-text: #f3ecdd;
-    --night-soft: #bfb29a;
-    --night-accent: #e3b866;
-    --night-line: rgba(227, 184, 102, .28);
-    --band: #e3b866;
-    --band-text: #0f0b06;
-    --btn-bg: #e3b866;
-    --btn-text: #0f0b06;
-    --btn-hover: #f3ecdd;
-    --pill-bg: #1c150c;
-    --pill-line: rgba(227, 184, 102, .28);
-    --print: #1c150c;
-    --shadow: rgba(0, 0, 0, .6);
-    --dlg-bg: var(--surface);
-    --dlg-line: rgba(227, 184, 102, .35);
-  }
-}
+/* A choice made with the theme button overrides the device setting. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -129,7 +112,28 @@ a:hover { color: var(--accent); }
 .skip:focus { top: 1rem; }
 .skip:hover { color: var(--btn-text); }
 
-/* ---------- Header ---------- */
+/* ---------- Header ----------
+   .head stays at the top (sticky, keeps its place in the flow). Once scrolled it gets a
+   blurred background and looks a little more compact; it slides away while scrolling down
+   and comes back on the way up (classes set by app.js). Only opacity and transform change,
+   so the layout never moves. */
+.head { position: sticky; top: 0; z-index: 30; pointer-events: none; transition: transform var(--head-dur) var(--breath-ease); }
+.head::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--head-bg); border-bottom: 1px solid var(--line); opacity: 0;
+  transition: opacity .25s ease, transform var(--head-dur) var(--breath-ease);
+}
+.head .top > * { pointer-events: auto; }
+.head .top, .head .brand img { transition: transform var(--head-dur) var(--breath-ease); }
+/* The blur is only switched on once scrolled: an active backdrop filter changes how the
+   text of the whole page is rasterized. */
+.head.is-scrolled::before { opacity: 1; transform: translateY(-14px); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); }
+.head.is-scrolled .top { transform: translateY(-7px); }
+.head.is-scrolled .brand img { transform: scale(.86); }
+.head.is-hidden { transform: translateY(-100%); }
+/* Anchor jumps leave room for the header. */
+main [id] { scroll-margin-top: 5.5rem; }
+
 .top { position: relative; display: flex; justify-content: space-between; align-items: center; padding-block: 1.25rem; }
 .brand { display: flex; gap: .7rem; align-items: center; text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .brand img { width: 44px; height: 44px; }
@@ -138,14 +142,34 @@ a:hover { color: var(--accent); }
 .top nav a:hover { color: var(--text); text-decoration: underline; text-underline-offset: .35em; }
 .top nav a.cta { color: var(--text); border: 1px solid var(--text); padding: .45rem 1.1rem; border-radius: 99px; transition: background-color .2s, color .2s; }
 .top nav a.cta:hover { background: var(--text); color: var(--bg); text-decoration: none; }
+/* Theme button, last in the nav next to "Contact" (inside the menu below 900 px, where the
+   header row has no room left). Shows the mode it switches to: moon in light, sun in dark. */
+.top nav .nav-end { display: flex; align-items: center; gap: 1.25rem; }
+.theme-btn { display: none; flex: none; width: 44px; height: 44px; padding: 0; place-items: center; border-radius: 50%; border: 1px solid var(--text); background: none; color: var(--text); cursor: pointer; transition: background-color .2s, color .2s; }
+.js .theme-btn { display: grid; }
+.theme-btn:hover { background: var(--text); color: var(--bg); }
+.theme-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.theme-btn .i-sun { display: none; }
+:root[data-theme="dark"] .theme-btn .i-sun { display: block; }
+:root[data-theme="dark"] .theme-btn .i-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-btn .i-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-btn .i-moon { display: none; }
+}
+/* Short color fade while switching (class set by app.js, not with reduced motion). */
+.theme-fade *, .theme-fade *::before, .theme-fade *::after {
+  transition: color .35s ease, background-color .35s ease, border-color .35s ease, fill .35s ease, stroke .35s ease, box-shadow .35s ease !important;
+}
+.theme-fade body { transition: color .35s ease, background-color .35s ease; }
+
 .menu-btn { display: none; font: inherit; background: none; border: 1px solid var(--text); border-radius: 99px; padding: .4rem 1rem; color: var(--text); min-height: 44px; cursor: pointer; }
 
 /* ---------- Hero: text + collage ---------- */
 .hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: clamp(1.5rem, 4vw, 4rem); padding-block: clamp(2.5rem, 7vw, 6rem) clamp(1.5rem, 4vw, 3rem); align-items: center; }
 .hero .welcome { color: var(--accent); font-size: .95rem; letter-spacing: .04em; }
 .hero h1 { font-size: clamp(3.2rem, 7.4vw, 7.2rem); margin-top: 1.25rem; }
-.hero h1 span { display: block; }
-.hero h1 span:nth-child(2) { color: var(--accent); }
+.hero h1 > span, .hero h1 > span > span { display: block; }
+.hero h1 > span:nth-child(2) { color: var(--accent); }
 .hero .lead { margin-top: 2rem; max-width: 34ch; color: var(--soft); font-size: 1.12rem; }
 .actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; margin-top: 2rem; }
 .btn { background: var(--btn-bg); color: var(--btn-text); text-decoration: none; padding: .9rem 1.5rem; border-radius: 99px; font-weight: 500; transition: background-color .2s; }
@@ -174,7 +198,7 @@ a:hover { color: var(--accent); }
 
 /* ---------- Rail layout ---------- */
 .railed { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: clamp(1rem, 3vw, 3rem); padding-block: clamp(3.5rem, 8vw, 7rem); }
-.rail { font-size: .85rem; color: var(--soft); position: sticky; top: 2rem; align-self: start; }
+.rail { font-size: .85rem; color: var(--soft); position: sticky; top: 6.5rem; align-self: start; }
 .rail b { display: block; font-weight: 300; font-size: 3.2rem; line-height: 1; color: var(--accent); letter-spacing: -.04em; }
 .h2 { font-size: clamp(2.3rem, 5vw, 4.6rem); max-width: 16ch; }
 .intro { color: var(--soft); margin-top: 1rem; max-width: 46ch; }
@@ -232,6 +256,49 @@ footer { padding-block: clamp(3rem, 6vw, 5rem) 2rem; }
 .motion-ready .reveal-pending { opacity: 0; transform: translateY(var(--breath-rise)); }
 @media (prefers-reduced-motion: reduce) {
   .reveal-pending { opacity: 1 !important; transform: none !important; }
+}
+
+/* ---------- Hero entrance (html.hero-intro, set by head.js before the first paint) ----------
+   Lines rise out of a mask, then the welcome line, lead and buttons fade in; the banner
+   print flies in from the right and turns into place, the seal pops last. About 1.2 s.
+   Keyframes without "to" end on the static values, so the end state is the normal layout.
+   The scroll depth of the collage uses the separate translate property (motion.js). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-intro main { overflow-x: clip; }
+  .hero-intro .hero h1 > span { overflow: clip; overflow-clip-margin: .12em; }
+  .hero-intro .hero h1 > span > span { animation: intro-line .8s var(--intro-ease) both; }
+  .hero-intro .hero h1 > span:nth-child(2) > span { animation-delay: .15s; }
+  .hero-intro .hero h1 > span:nth-child(3) > span { animation-delay: .3s; }
+  .hero-intro .hero .welcome { animation: intro-fade .65s var(--intro-ease) .35s both; }
+  .hero-intro .hero .lead { animation: intro-fade .65s var(--intro-ease) .45s both; }
+  .hero-intro .hero .actions { animation: intro-fade .65s var(--intro-ease) .55s both; }
+  .hero-intro .collage .print { animation: intro-print 1s var(--intro-ease) .08s both; }
+  .hero-intro .collage .seal { animation: intro-pop .5s var(--pop-ease) .7s both; }
+  .hero-intro .collage .note { animation: intro-fade .5s ease .75s both; }
+}
+@keyframes intro-line { from { transform: translateY(120%); } }
+@keyframes intro-fade { from { opacity: 0; transform: translateY(14px); } }
+@keyframes intro-print { from { opacity: 0; transform: translate(64px, 26px) rotate(5deg); } to { transform: translate(0, 0) rotate(-2deg); } }
+@keyframes intro-pop { from { opacity: 0; transform: rotate(-8deg) scale(.55); } to { transform: rotate(6deg) scale(1); } }
+
+/* ---------- Back to top (button added by app.js) ---------- */
+.to-top {
+  position: fixed; z-index: 25; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom));
+  width: 48px; height: 48px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%;
+  background: var(--btn-bg); color: var(--btn-text); cursor: pointer;
+  /* A ring in the page color keeps the button apart from dark blocks behind it. */
+  box-shadow: 0 0 0 2px var(--bg), 0 12px 24px -12px var(--shadow);
+  opacity: 0; visibility: hidden; transform: translateY(12px);
+  transition: opacity .28s ease, transform .28s var(--breath-ease), visibility 0s linear .28s, background-color .2s;
+}
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; transition: opacity .28s ease, transform .28s var(--breath-ease), visibility 0s, background-color .2s; }
+.to-top:hover { background: var(--btn-hover); }
+.to-top:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
+.to-top svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (prefers-reduced-motion: reduce) {
+  .head, .head::before, .head .top, .head .brand img, .to-top, .to-top.is-shown { transition: none; }
+  .to-top { transform: none; }
 }
 
 /* ---------- "Learn more" button and pop-up ---------- */

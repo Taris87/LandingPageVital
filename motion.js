@@ -1,7 +1,8 @@
 /*
   Vital Movement Center – motion "breath". Vanilla JS, no libraries.
   - Reveals: only elements below the first viewport get a start state (opacity + transform).
-  - Golden band: text moves along the curve, coupled to scrolling (no loop, no scroll-jacking).
+  - Golden band: text glides slowly and steadily along the curve. It pauses while the mouse
+    is over it, while it is off screen and while the tab is hidden.
   - Hero collage: slight depth shift while scrolling (transform via the translate property).
   - prefers-reduced-motion: reduce -> nothing moves, nothing is hidden. A change of the
     setting at runtime is picked up.
@@ -86,35 +87,113 @@
     window.addEventListener("beforeprint", showAll);
   }
 
-  /* ---------- Scroll-coupled band + collage depth ---------- */
+  /* ---------- Golden band: slow, steady loop along the curve ---------- */
   const band = document.querySelector(".band");
   const paths = Array.from(document.querySelectorAll(".band textPath"));
-  const layers = Array.from(document.querySelectorAll("[data-depth]"));
-  const SPEED = 0.5; // px of text travel per px scrolled
+  const narrowBand = matchMedia("(max-width: 639px)");
+  // Screen pixels per second; a little slower on the narrow band.
+  const bandSpeed = () => (narrowBand.matches ? 26 : 34);
   let bandVisible = true;
+  let bandHover = false;
   let bandIO = null;
-  let ticking = false;
-  let running = false;
+  let bandRaf = 0;
+  let bandLast = 0;
+  let bandOn = false;
 
   function phraseLength(tp) {
     if (!tp._phrase) {
-      const len = tp.parentNode.getComputedTextLength(); // 0 while the svg is display: none
+      const text = tp.parentNode;
+      const len = text.getComputedTextLength(); // 0 while the svg is display: none
       tp._phrase = len ? len / (Number(tp.dataset.reps) || 1) : 0;
+      const svg = text.ownerSVGElement;
+      const w = svg.getBoundingClientRect().width;
+      tp._scale = w ? svg.viewBox.baseVal.width / w : 1; // user units per screen pixel
     }
     return tp._phrase;
   }
+
+  const bandCanRun = () => bandOn && bandVisible && !bandHover && !document.hidden;
+
+  function bandTick(t) {
+    bandRaf = 0;
+    if (!bandCanRun()) return;
+    const dt = bandLast ? Math.min(t - bandLast, 64) / 1000 : 0; // no jump after a pause
+    bandLast = t;
+    const v = bandSpeed();
+    paths.forEach((tp) => {
+      const p = phraseLength(tp);
+      if (!p) return;
+      // One phrase further the text looks exactly the same, so wrapping is seamless.
+      tp._pos = ((tp._pos || 0) + v * tp._scale * dt) % p;
+      tp.setAttribute("startOffset", (-tp._pos).toFixed(2));
+    });
+    bandRaf = requestAnimationFrame(bandTick);
+  }
+
+  function bandUpdate() {
+    if (bandCanRun()) {
+      if (!bandRaf) {
+        bandLast = 0;
+        bandRaf = requestAnimationFrame(bandTick);
+      }
+    } else if (bandRaf) {
+      cancelAnimationFrame(bandRaf);
+      bandRaf = 0;
+    }
+  }
+
+  function remeasure() {
+    paths.forEach((tp) => {
+      const old = tp._phrase;
+      tp._phrase = 0;
+      const p = phraseLength(tp);
+      // Keep the position within the new phrase length.
+      if (old && p) tp._pos = ((tp._pos || 0) / old) * p;
+    });
+  }
+
+  if (band) {
+    band.addEventListener("pointerenter", (e) => {
+      if (e.pointerType === "mouse") { bandHover = true; bandUpdate(); }
+    });
+    band.addEventListener("pointerleave", () => { bandHover = false; bandUpdate(); });
+  }
+  document.addEventListener("visibilitychange", bandUpdate);
+
+  function startBand() {
+    if (bandOn) return;
+    bandOn = true;
+    if (band && hasIO && !bandIO) {
+      bandIO = new IntersectionObserver((entries) => {
+        bandVisible = entries[entries.length - 1].isIntersecting;
+        bandUpdate();
+      });
+      bandIO.observe(band);
+    }
+    bandUpdate();
+  }
+
+  function stopBand() {
+    bandOn = false;
+    bandUpdate();
+    if (bandIO) bandIO.disconnect();
+    bandIO = null;
+    bandVisible = true;
+    paths.forEach((tp) => {
+      tp._pos = 0;
+      tp.setAttribute("startOffset", "0");
+    });
+  }
+
+  /* ---------- Hero collage depth (scroll-coupled, translate property) ---------- */
+  const layers = Array.from(document.querySelectorAll("[data-depth]"));
+  let ticking = false;
+  let running = false;
 
   function frame() {
     ticking = false;
     if (!running) return;
     const y = window.scrollY;
-    if (bandVisible) {
-      paths.forEach((tp) => {
-        const p = phraseLength(tp);
-        if (!p) return;
-        tp.setAttribute("startOffset", (-((y * SPEED) % p)).toFixed(1));
-      });
-    }
     if (y < window.innerHeight * 1.2) {
       layers.forEach((el) => {
         el.style.translate = "0 " + (-y * Number(el.dataset.depth)).toFixed(1) + "px";
@@ -130,46 +209,37 @@
   }
 
   function onResize() {
-    paths.forEach((tp) => (tp._phrase = 0));
+    remeasure();
     onScroll();
   }
 
-  function startScrollMotion() {
+  function startMotion() {
     if (running) return;
     running = true;
-    if (band && hasIO) {
-      bandIO = new IntersectionObserver((entries) => {
-        bandVisible = entries[entries.length - 1].isIntersecting;
-        if (bandVisible) onScroll();
-      });
-      bandIO.observe(band);
-    }
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     frame();
+    startBand();
   }
 
-  function stopScrollMotion() {
+  function stopMotion() {
     running = false;
-    if (bandIO) bandIO.disconnect();
-    bandIO = null;
-    bandVisible = true;
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", onResize);
-    paths.forEach((tp) => tp.setAttribute("startOffset", "0"));
     layers.forEach((el) => (el.style.translate = ""));
+    stopBand();
     showAll();
   }
 
   // The phrase length depends on the band font; measure again once the fonts are in.
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(onResize);
-    document.fonts.addEventListener("loadingdone", onResize);
+    document.fonts.ready.then(remeasure);
+    document.fonts.addEventListener("loadingdone", remeasure);
   }
 
   if (!reduce.matches) {
     setupReveals();
-    startScrollMotion();
+    startMotion();
   }
-  reduce.addEventListener("change", (e) => (e.matches ? stopScrollMotion() : startScrollMotion()));
+  reduce.addEventListener("change", (e) => (e.matches ? stopMotion() : startMotion()));
 })();
