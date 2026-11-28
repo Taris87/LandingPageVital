@@ -49,3 +49,6 @@ The page has a strict Content Security Policy (`index.html`, `<meta http-equiv="
 
 ## Before going live
 See `PLACEHOLDERS.md` for missing content (legal notice, privacy policy, opening hours, domain).
+
+## License
+The source code is available under the MIT License (`LICENSE`). The website content, logo, images and business information belong to Vital Movement Center, LLC and are not covered by that license; see `NOTICE.md`. The fonts in `fonts/` are licensed under the SIL Open Font License.
