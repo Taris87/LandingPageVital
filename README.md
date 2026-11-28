@@ -35,7 +35,7 @@ taping: {
 - Empty `sections`, `sectionsTitle` or `source` are simply not shown.
 - The key (`taping`, `training`, `massage`) matches `data-info="…"` on the "Learn more" button in `index.html`. A new service needs a new key and a button with the same value.
 - Use US spelling and plain text (no HTML).
-- After any change to `style.css`, `app.js` or `service-info.js`, raise the `?v=` number in `index.html` so browsers load the new version.
+- After any change to `style.css`, `app.js`, `motion.js` or `service-info.js`, raise the `?v=` number in `index.html` so browsers load the new version.
 
 ## Hosting
 This project is deployed with GitHub Pages on every push to `main`; the whole repository folder is published. It can also be uploaded to a standard Apache/LiteSpeed host such as Hostinger. The included `.htaccess` is intended for Apache/LiteSpeed hosting and is not used by GitHub Pages.

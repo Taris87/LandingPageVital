@@ -114,6 +114,10 @@ ul, ol { padding: 0; list-style: none; }
 a { color: inherit; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+/* Filled buttons use the page color as text, so their ring takes the text color instead. */
+.btn:focus-visible, .skip:focus-visible { outline-color: var(--text); }
+/* main is only focused as the skip-link target; no ring needed there. */
+main:focus { outline: none; }
 
 body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.65; }
 .wrap { max-width: 1440px; margin: 0 auto; padding-inline: var(--gx); }

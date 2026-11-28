@@ -12,3 +12,6 @@ each item needs real information from the business owner.
 | Further pop-up details for Personal Medical Training | `training` entry in `service-info.js` | `sections` and `source` are empty |
 | Further pop-up details for Wellness Massage | `massage` entry in `service-info.js` | `sections` and `source` are empty |
 | Domain, `og:url`, `og:image` | `<head>` of `index.html`, `url`/`logo` in the JSON-LD | Left out until the final domain is known, because these need absolute URLs |
+| Canonical link | `<link rel="canonical">` in `index.html` | Missing, needs the final domain |
+| `robots.txt` | Repository root | Missing; its sitemap line needs the final domain |
+| `sitemap.xml` | Repository root | Missing, needs absolute URLs of the final domain |
