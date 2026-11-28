@@ -40,7 +40,7 @@ taping: {
 - After any change to `style.css`, `head.js`, `app.js`, `motion.js` or `service-info.js`, raise the `?v=` number in `index.html` so browsers load the new version.
 
 ## Light and dark mode
-On the first visit the page follows the device setting. The sun/moon button in the navigation (inside the menu on small screens) switches the mode; the choice is stored in the browser (`localStorage`, no cookie) and used on later visits. Colors are defined once in `style.css` as `light-dark(light, dark)` pairs.
+On the first visit the page follows the device setting. The sun/moon button in the navigation (inside the menu on small screens) switches the mode; the choice is stored in the browser (`localStorage`, no cookie) and used on later visits. Colors are defined in `style.css`: light values in `:root`, dark values once as `--d-*` variables, switched on by the device setting or by the dark choice.
 
 ## Hosting
 This project is deployed with GitHub Pages on every push to `main`; the whole repository folder is published. It can also be uploaded to a standard Apache/LiteSpeed host such as Hostinger. The included `.htaccess` is intended for Apache/LiteSpeed hosting and is not used by GitHub Pages.

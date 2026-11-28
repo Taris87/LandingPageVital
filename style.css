@@ -28,43 +28,65 @@
 }
 
 /* ---------- Tokens ----------
-   Every color is one light-dark(light, dark) pair, so each value exists only once.
-   The pair follows color-scheme: the device setting by default ("light dark"), or the
-   visitor's choice from the theme button (html[data-theme], saved by head.js / app.js). */
+   Light values are the default. The dark values are written once (--d-*) and switched on
+   in two ways: by the device setting (unless the visitor chose light with the theme
+   button) or by the dark choice (html[data-theme], saved by head.js / app.js). */
 :root {
-  color-scheme: light dark;
-  --bg: light-dark(#f7f1e4, #0f0b06);
-  --surface: light-dark(#efe6d2, #1c150c);
-  --text: light-dark(#2a1e10, #f3ecdd);
-  --soft: light-dark(#5a4630, #bfb29a);
-  --accent: light-dark(#6b4710, #e3b866);
-  --line: light-dark(rgba(42, 30, 16, .22), rgba(227, 184, 102, .28));
-  --night: light-dark(#16110a, #1c150c);
+  color-scheme: light;
+  --bg: #f7f1e4;
+  --surface: #efe6d2;
+  --text: #2a1e10;
+  --soft: #5a4630;
+  --accent: #6b4710;
+  --line: rgba(42, 30, 16, .22);
+  --night: #16110a;
   --night-text: #f3ecdd;
-  --night-soft: light-dark(#c9bda5, #bfb29a);
+  --night-soft: #c9bda5;
   --night-accent: #e3b866;
-  --night-line: light-dark(rgba(243, 236, 221, .18), rgba(227, 184, 102, .28));
+  --night-line: rgba(243, 236, 221, .18);
   --band: #e3b866;
-  --band-text: light-dark(#16110a, #0f0b06);
-  --btn-bg: light-dark(#2a1e10, #e3b866);
-  --btn-text: light-dark(#f7f1e4, #0f0b06);
-  --btn-hover: light-dark(#6b4710, #f3ecdd);
-  --pill-bg: light-dark(#efe6d2, #1c150c);
-  --pill-line: light-dark(transparent, rgba(227, 184, 102, .28));
-  --print: light-dark(#16110a, #1c150c);
-  --shadow: light-dark(rgba(42, 30, 16, .55), rgba(0, 0, 0, .6));
-  --head-bg: light-dark(rgba(247, 241, 228, .82), rgba(15, 11, 6, .8));
+  --band-text: #16110a;
+  --btn-bg: #2a1e10;
+  --btn-text: #f7f1e4;
+  --btn-hover: #6b4710;
+  --pill-bg: #efe6d2;
+  --pill-line: transparent;
+  --print: #16110a;
+  --shadow: rgba(42, 30, 16, .55);
+  --head-bg: rgba(247, 241, 228, .82);
 
   /* Pop-up uses the same tokens */
-  --dlg-bg: light-dark(var(--bg), var(--surface));
+  --dlg-bg: var(--bg);
   --dlg-fg: var(--text);
   --dlg-muted: var(--soft);
   --dlg-accent: var(--accent);
   --dlg-accent-text: var(--accent);
   --dlg-link: var(--text);
-  --dlg-line: light-dark(var(--line), rgba(227, 184, 102, .35));
+  --dlg-line: var(--line);
   --dlg-display: var(--sans);
   --dlg-display-weight: 300;
+
+  /* Dark values (only used through the two blocks below) */
+  --d-bg: #0f0b06;
+  --d-surface: #1c150c;
+  --d-text: #f3ecdd;
+  --d-soft: #bfb29a;
+  --d-accent: #e3b866;
+  --d-line: rgba(227, 184, 102, .28);
+  --d-night: #1c150c;
+  --d-night-soft: #bfb29a;
+  --d-night-line: rgba(227, 184, 102, .28);
+  --d-band-text: #0f0b06;
+  --d-btn-bg: #e3b866;
+  --d-btn-text: #0f0b06;
+  --d-btn-hover: #f3ecdd;
+  --d-pill-bg: #1c150c;
+  --d-pill-line: rgba(227, 184, 102, .28);
+  --d-print: #1c150c;
+  --d-shadow: rgba(0, 0, 0, .6);
+  --d-head-bg: rgba(15, 11, 6, .8);
+  --d-dlg-bg: var(--d-surface);
+  --d-dlg-line: rgba(227, 184, 102, .35);
 
   --sans: "DM Sans", system-ui, sans-serif;
   --serif: "Fraunces", Georgia, serif;
@@ -82,9 +104,55 @@
   --pop-ease: cubic-bezier(.34, 1.56, .64, 1);
   --head-dur: 320ms;
 }
-/* A choice made with the theme button overrides the device setting. */
-:root[data-theme="light"] { color-scheme: light; }
-:root[data-theme="dark"] { color-scheme: dark; }
+/* Dark mode: device setting (no light choice) or dark choice. Both blocks only assign. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: var(--d-bg);
+    --surface: var(--d-surface);
+    --text: var(--d-text);
+    --soft: var(--d-soft);
+    --accent: var(--d-accent);
+    --line: var(--d-line);
+    --night: var(--d-night);
+    --night-soft: var(--d-night-soft);
+    --night-line: var(--d-night-line);
+    --band-text: var(--d-band-text);
+    --btn-bg: var(--d-btn-bg);
+    --btn-text: var(--d-btn-text);
+    --btn-hover: var(--d-btn-hover);
+    --pill-bg: var(--d-pill-bg);
+    --pill-line: var(--d-pill-line);
+    --print: var(--d-print);
+    --shadow: var(--d-shadow);
+    --head-bg: var(--d-head-bg);
+    --dlg-bg: var(--d-dlg-bg);
+    --dlg-line: var(--d-dlg-line);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: var(--d-bg);
+  --surface: var(--d-surface);
+  --text: var(--d-text);
+  --soft: var(--d-soft);
+  --accent: var(--d-accent);
+  --line: var(--d-line);
+  --night: var(--d-night);
+  --night-soft: var(--d-night-soft);
+  --night-line: var(--d-night-line);
+  --band-text: var(--d-band-text);
+  --btn-bg: var(--d-btn-bg);
+  --btn-text: var(--d-btn-text);
+  --btn-hover: var(--d-btn-hover);
+  --pill-bg: var(--d-pill-bg);
+  --pill-line: var(--d-pill-line);
+  --print: var(--d-print);
+  --shadow: var(--d-shadow);
+  --head-bg: var(--d-head-bg);
+  --dlg-bg: var(--d-dlg-bg);
+  --dlg-line: var(--d-dlg-line);
+}
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
